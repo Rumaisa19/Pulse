@@ -1,0 +1,46 @@
+# --- Security & Environment ---
+.env
+*secrets.dart
+ios/Flutter/ephemeral/
+
+# --- Hive & Local Databases ---
+*.hive
+*.lock
+*.lock.json
+# If you manually set a storage path, ignore that folder:
+/hive_data/
+
+# --- Flutter / Dart ---
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+coverage/
+
+# --- Android Specific ---
+android/**/generated/
+android/app/debug/
+android/app/profile/
+android/app/release/
+android/key.properties
+*.keystore
+*.jks
+
+# --- iOS Specific ---
+ios/Flutter/Generated.xcframework/
+ios/Flutter/flutter_export_environment.sh
+ios/Flutter/Flutter.podspec
+ios/DerivedData/
+*.moved-aside
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+
+# --- IDEs & OS ---
+.idea/
+.vscode/
+*.iml
+.DS_Store
