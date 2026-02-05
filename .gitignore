@@ -1,16 +1,4 @@
-# --- Security & Environment ---
-.env
-*secrets.dart
-ios/Flutter/ephemeral/
-
-# --- Hive & Local Databases ---
-*.hive
-*.lock
-*.lock.json
-# If you manually set a storage path, ignore that folder:
-/hive_data/
-
-# --- Flutter / Dart ---
+# Flutter/Dart
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
@@ -18,32 +6,24 @@ ios/Flutter/ephemeral/
 .pub-cache/
 .pub/
 build/
-coverage/
 
-# --- Android Specific ---
-android/**/generated/
-android/app/debug/
-android/app/profile/
-android/app/release/
-android/key.properties
-*.keystore
-*.jks
+# Android
+.gradle/
+local.properties
+**/android/**.keystore
+**/android/**.jks
+**/android/bundle
+**/android/key.properties
 
-# --- iOS Specific ---
-ios/Flutter/Generated.xcframework/
-ios/Flutter/flutter_export_environment.sh
-ios/Flutter/Flutter.podspec
-ios/DerivedData/
-*.moved-aside
-*.mode1v3
-*.mode2v3
-*.perspectivev3
+# iOS/macOS
+Pods/
+.generated/
+DerivedData/
 
-# --- IDEs & OS ---
-.idea/
-.vscode/
-*.iml
-.DS_Store
+# Windows/Linux (This is likely what caused the C++ tag)
+**/windows/flutter/
+**/windows/runner/
+build/windows/
 
-# Custom Secrets
+# Secrets
 .env
