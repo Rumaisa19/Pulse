@@ -1,4 +1,4 @@
-package com.example.chronicle
+package com.pulse.news
 
 import io.flutter.embedding.android.FlutterActivity
 

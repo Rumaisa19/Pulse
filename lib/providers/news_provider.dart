@@ -3,9 +3,7 @@ import '../data/models/article.dart';
 import '../data/repositories/news_repository.dart';
 
 class NewsProvider with ChangeNotifier {
-  // Inject the repository through the constructor
   final NewsRepository _repository;
-
   NewsProvider({required NewsRepository repository}) : _repository = repository;
 
   List<Article> _articles = [];
@@ -16,17 +14,24 @@ class NewsProvider with ChangeNotifier {
   bool get isLoading => _isLoading;
   String get errorMessage => _errorMessage;
 
-  Future<void> fetchNews() async {
+  // Inside NewsProvider class
+  Future<void> fetchNews({
+    String category = 'technology',
+    bool forceRefresh = false,
+  }) async {
+    // If we already have articles and the user didn't ask for a 'hard refresh', do nothing.
+    if (_articles.isNotEmpty && !forceRefresh) return;
+
+    if (_isLoading) return;
+
     _isLoading = true;
     _errorMessage = '';
     notifyListeners();
 
     try {
-      // The Provider doesn't care about Dio or Hive anymore
-      // It just trusts the Repository to give it a List<Article>
-      _articles = await _repository.getNews();
+      _articles = await _repository.getNews(category);
     } catch (e) {
-      _errorMessage = "Failed to load news. Please try again.";
+      _errorMessage = "Error: $e";
     } finally {
       _isLoading = false;
       notifyListeners();
