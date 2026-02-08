@@ -1,39 +1,100 @@
+import 'dart:async'; // Added for Timer
 import 'package:flutter/material.dart';
-import '../data/models/article.dart';
-import '../data/repositories/news_repository.dart';
+import 'package:pulse_news/data/models/article.dart';
+import 'package:pulse_news/data/repositories/news_repository.dart';
 
-class NewsProvider with ChangeNotifier {
-  final NewsRepository _repository;
-  NewsProvider({required NewsRepository repository}) : _repository = repository;
+class NewsProvider extends ChangeNotifier {
+  final NewsRepository repository;
 
+  NewsProvider({required this.repository});
+
+  // State Variables
   List<Article> _articles = [];
   bool _isLoading = false;
-  String _errorMessage = '';
+  bool _isFetchingMore = false;
+  int _currentPage = 1;
+  String _currentCategory = 'world';
+  String _searchQuery = ''; // Track what user is searching
+  Timer? _debounce; // To prevent hitting API too hard
 
+  // Getters
   List<Article> get articles => _articles;
   bool get isLoading => _isLoading;
-  String get errorMessage => _errorMessage;
+  bool get isFetchingMore => _isFetchingMore;
 
-  // Inside NewsProvider class
-  Future<void> fetchNews({
-    String category = 'technology',
-    bool forceRefresh = false,
-  }) async {
-    // If we already have articles and the user didn't ask for a 'hard refresh', do nothing.
-    if (_articles.isNotEmpty && !forceRefresh) return;
+  /// Search Logic with Debounce (Day 8)
+  void searchNews(String query) {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
 
-    if (_isLoading) return;
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      _searchQuery = query;
+      _articles.clear();
+      // When we search, we reset the list and start from page 1
+      loadInitialNews();
+    });
+  }
 
+  // Defensive coding: ensures we don't crash if the repository/box is briefly unavailable
+  bool isFavorite(Article article) {
+    try {
+      return repository.isFavorite(article.id);
+    } catch (e) {
+      return false;
+    }
+  }
+
+  void toggleFavorite(Article article) {
+    repository.toggleFavorite(article);
+    notifyListeners(); // Refresh UI to show filled/empty heart
+  }
+
+  List<Article> get favoriteArticles => repository.getFavorites();
+
+  /// Initial fetch (Updated for Search)
+  Future<void> loadInitialNews({String? category}) async {
     _isLoading = true;
-    _errorMessage = '';
+    _currentPage = 1;
+    if (category != null) _currentCategory = category;
+
     notifyListeners();
 
     try {
-      _articles = await _repository.getNews(category);
+      // LOGIC: If _searchQuery is not empty, we tell the repo to search.
+      // Otherwise, we tell it to fetch the category.
+      _articles = await repository.getNews(
+        _searchQuery.isNotEmpty ? _searchQuery : _currentCategory,
+        page: _currentPage,
+        isSearch: _searchQuery.isNotEmpty, // New flag for the repository
+      );
     } catch (e) {
-      _errorMessage = "Error: $e";
+      debugPrint("Provider Error: $e");
     } finally {
       _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  /// Pagination (Updated for Search)
+  Future<void> loadMoreNews() async {
+    if (_isFetchingMore || _isLoading) return;
+
+    _isFetchingMore = true;
+    notifyListeners();
+
+    try {
+      _currentPage++;
+      final newArticles = await repository.getNews(
+        _searchQuery.isNotEmpty ? _searchQuery : _currentCategory,
+        page: _currentPage,
+        isSearch: _searchQuery.isNotEmpty,
+      );
+
+      _articles.addAll(newArticles);
+    } catch (e) {
+      _currentPage--;
+      debugPrint("Pagination Error: $e");
+    } finally {
+      _isFetchingMore = false;
       notifyListeners();
     }
   }

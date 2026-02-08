@@ -3,42 +3,64 @@ import 'package:hive/hive.dart';
 import '../models/article.dart';
 import '../services/news_api_service.dart';
 
-// This Repository acts as the 'Single Source of Truth' for the UI.
-// It decides whether to pull fresh data from the web or fallback to the local database.
 class NewsRepository {
-  final NewsApiService
-  apiService; // Handles network requests to The Guardian/NewsAPI
-  final Box<Article> articleBox; // Handles local NoSQL storage via Hive
+  final NewsApiService apiService;
+  final Box<Article> articleBox;
+  final Box<Article> favoritesBox;
 
-  NewsRepository({required this.apiService, required this.articleBox});
+  NewsRepository({
+    required this.apiService,
+    required this.articleBox,
+    required this.favoritesBox,
+  });
+  List<Article> getFavorites() {
+    return favoritesBox.values.toList();
+  }
 
-  Future<List<Article>> getNews(String category) async {
-    // Check if the device has an active internet connection (Wi-Fi, Mobile, or Ethernet)
+  void toggleFavorite(Article article) {
+    if (favoritesBox.containsKey(article.id)) {
+      favoritesBox.delete(article.id);
+    } else {
+      favoritesBox.put(article.id, article);
+    }
+  }
+
+  bool isFavorite(String id) {
+    return favoritesBox.containsKey(id);
+  }
+
+  Future<List<Article>> getNews(
+    String queryOrCategory, {
+    int page = 1,
+    bool isSearch = false,
+  }) async {
     final connectivity = await Connectivity().checkConnectivity();
-
-    // Logic: If the list of results does NOT contain 'none', we are considered 'online'
     final bool isOnline = !connectivity.contains(ConnectivityResult.none);
 
-    // Inside NewsRepository
     if (isOnline) {
       try {
-        final remoteArticles = await apiService.fetchNews(category);
+        // Correctly passing all three parameters to the fixed service
+        final result = await apiService.fetchNews(
+          queryOrCategory,
+          page: page,
+          isSearch: isSearch,
+        );
+        final List<Article> remoteArticles = result['articles'];
 
-        // CHANGE: Transactional update
-        await articleBox.clear();
+        if (page == 1) {
+          await articleBox.clear();
+        }
+
         await articleBox.addAll(remoteArticles);
-
         return remoteArticles;
       } catch (e) {
-        return _getCachedNews(); // Fallback to cache if remote fetch fails
+        return _getCachedNews();
       }
     } else {
-      // Offline Mode: Immediately serve the news saved in the Hive box
       return _getCachedNews();
     }
   }
 
-  // Helper method to retrieve data from local storage
   List<Article> _getCachedNews() {
     return articleBox.values.toList();
   }

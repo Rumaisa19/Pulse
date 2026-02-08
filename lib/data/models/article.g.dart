@@ -20,19 +20,25 @@ class ArticleAdapter extends TypeAdapter<Article> {
       id: fields[0] as String,
       title: fields[1] as String,
       fields: (fields[2] as Map?)?.cast<String, dynamic>(),
+      sectionName: fields[3] as String,
+      webUrl: fields[4] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, Article obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
       ..write(obj.title)
       ..writeByte(2)
-      ..write(obj.fields);
+      ..write(obj.fields)
+      ..writeByte(3)
+      ..write(obj.sectionName)
+      ..writeByte(4)
+      ..write(obj.webUrl);
   }
 
   @override
@@ -54,10 +60,14 @@ Article _$ArticleFromJson(Map<String, dynamic> json) => Article(
       id: json['id'] as String,
       title: json['webTitle'] as String,
       fields: json['fields'] as Map<String, dynamic>?,
+      sectionName: json['sectionName'] as String,
+      webUrl: json['webUrl'] as String,
     );
 
 Map<String, dynamic> _$ArticleToJson(Article instance) => <String, dynamic>{
       'id': instance.id,
       'webTitle': instance.title,
       'fields': instance.fields,
+      'sectionName': instance.sectionName,
+      'webUrl': instance.webUrl,
     };
