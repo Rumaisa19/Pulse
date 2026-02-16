@@ -16,27 +16,29 @@ class Article {
   @HiveField(2)
   final Map<String, dynamic>? fields;
 
-  // NEW FIELDS FOR DETAIL SCREEN
   @HiveField(3)
   final String sectionName;
 
   @HiveField(4)
   final String webUrl;
 
+  @HiveField(5)
+  final String webPublicationDate;
+
   Article({
-    required this.id, 
-    required this.title, 
+    required this.id,
+    required this.title,
     required this.fields,
     required this.sectionName,
     required this.webUrl,
+    required this.webPublicationDate,
   });
 
-  // Business Logic: Extract clean summary and image from the fields map
   String get summary => fields?['trailText'] ?? 'No summary available';
   String get thumbnail => fields?['thumbnail'] ?? '';
 
   factory Article.fromJson(Map<String, dynamic> json) =>
       _$ArticleFromJson(json);
-      
+
   Map<String, dynamic> toJson() => _$ArticleToJson(this);
 }

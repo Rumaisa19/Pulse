@@ -13,10 +13,13 @@ class NewsRepository {
     required this.articleBox,
     required this.favoritesBox,
   });
+
+  /// Retrieves the list of favorite articles from the favorites box.
   List<Article> getFavorites() {
     return favoritesBox.values.toList();
   }
 
+  /// Toggles the favorite status of an article.
   void toggleFavorite(Article article) {
     if (favoritesBox.containsKey(article.id)) {
       favoritesBox.delete(article.id);
@@ -25,10 +28,13 @@ class NewsRepository {
     }
   }
 
+  /// Checks if an article is marked as a favorite.
   bool isFavorite(String id) {
     return favoritesBox.containsKey(id);
   }
 
+  /// Fetches news articles based on the provided query or category.
+  /// If online, it fetches from the API; if offline, it retrieves cached articles.
   Future<List<Article>> getNews(
     String queryOrCategory, {
     int page = 1,
@@ -39,7 +45,6 @@ class NewsRepository {
 
     if (isOnline) {
       try {
-        // Correctly passing all three parameters to the fixed service
         final result = await apiService.fetchNews(
           queryOrCategory,
           page: page,

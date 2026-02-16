@@ -15,7 +15,10 @@ class NewsApiService {
       dotenv.env['GUARDIAN_BASE_URL'] ??
       'https://content.guardianapis.com/search';
 
-  /// UPDATED: Accepts isSearch flag to handle query (q) vs section filtering.
+  /// Fetches news articles based on the provided query or category.
+  /// If [isSearch] is true, the [queryOrCategory] is treated as a search query.
+  /// Otherwise, it is treated as a section filter. The method returns a map
+  /// containing a list of articles and the total number of pages.
   Future<Map<String, dynamic>> fetchNews(
     String queryOrCategory, {
     int page = 1,
@@ -26,7 +29,6 @@ class NewsApiService {
         _baseUrl,
         queryParameters: {
           'api-key': _apiKey,
-          // FIX: Conditional logic for search keywords vs static categories
           if (isSearch)
             'q': queryOrCategory
           else

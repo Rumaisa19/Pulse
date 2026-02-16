@@ -1,4 +1,4 @@
-import 'dart:async'; // Added for Timer
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:pulse_news/data/models/article.dart';
 import 'package:pulse_news/data/repositories/news_repository.dart';
@@ -14,27 +14,55 @@ class NewsProvider extends ChangeNotifier {
   bool _isFetchingMore = false;
   int _currentPage = 1;
   String _currentCategory = 'world';
-  String _searchQuery = ''; // Track what user is searching
-  Timer? _debounce; // To prevent hitting API too hard
+  String _searchQuery = '';
+  Timer? _debounce;
 
   // Getters
   List<Article> get articles => _articles;
   bool get isLoading => _isLoading;
   bool get isFetchingMore => _isFetchingMore;
+  String get currentCategory => _currentCategory;
+  String get searchQuery => _searchQuery; // ✅ Added for empty state check
+  List<Article> get favoriteArticles => repository.getFavorites();
 
-  /// Search Logic with Debounce (Day 8)
+  // Dispose timer to prevent memory leak
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
+  }
+
+  /// Search Logic with Debounce
   void searchNews(String query) {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
 
     _debounce = Timer(const Duration(milliseconds: 500), () {
-      _searchQuery = query;
+      _searchQuery = query.trim();
       _articles.clear();
-      // When we search, we reset the list and start from page 1
+      _currentPage = 1;
       loadInitialNews();
     });
   }
 
-  // Defensive coding: ensures we don't crash if the repository/box is briefly unavailable
+  // Immediate search when user hits Enter
+  void searchNewsImmediate(String query) {
+    _debounce?.cancel();
+    _searchQuery = query.trim();
+    _articles.clear();
+    _currentPage = 1;
+    loadInitialNews();
+  }
+
+  //Clear search state properly
+  void clearSearch() {
+    _debounce?.cancel();
+    _searchQuery = '';
+    _articles.clear();
+    _currentPage = 1;
+    loadInitialNews();
+  }
+
+  // ensures we don't crash if the box is briefly unavailable
   bool isFavorite(Article article) {
     try {
       return repository.isFavorite(article.id);
@@ -45,26 +73,33 @@ class NewsProvider extends ChangeNotifier {
 
   void toggleFavorite(Article article) {
     repository.toggleFavorite(article);
-    notifyListeners(); // Refresh UI to show filled/empty heart
+    notifyListeners();
   }
 
-  List<Article> get favoriteArticles => repository.getFavorites();
-
-  /// Initial fetch (Updated for Search)
   Future<void> loadInitialNews({String? category}) async {
+    if (category != null) {
+      if (_currentCategory == category) {
+        _currentCategory = '';
+      } else {
+        _currentCategory = category;
+      }
+
+      notifyListeners();
+    }
+
     _isLoading = true;
     _currentPage = 1;
-    if (category != null) _currentCategory = category;
-
     notifyListeners();
 
     try {
-      // LOGIC: If _searchQuery is not empty, we tell the repo to search.
-      // Otherwise, we tell it to fetch the category.
+      final query = _searchQuery.isNotEmpty
+          ? _searchQuery
+          : (_currentCategory.isEmpty ? 'news' : _currentCategory);
+
       _articles = await repository.getNews(
-        _searchQuery.isNotEmpty ? _searchQuery : _currentCategory,
+        query,
         page: _currentPage,
-        isSearch: _searchQuery.isNotEmpty, // New flag for the repository
+        isSearch: _searchQuery.isNotEmpty,
       );
     } catch (e) {
       debugPrint("Provider Error: $e");
@@ -74,7 +109,7 @@ class NewsProvider extends ChangeNotifier {
     }
   }
 
-  /// Pagination (Updated for Search)
+  // Pagination
   Future<void> loadMoreNews() async {
     if (_isFetchingMore || _isLoading) return;
 

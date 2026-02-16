@@ -1,4 +1,4 @@
-# Flutter/Dart
+# --- FLUTTER & DART ---
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
@@ -7,23 +7,30 @@
 .pub/
 build/
 
-# Android
+*.g.dart
+
+# --- ANDROID ---
 .gradle/
 local.properties
 **/android/**.keystore
 **/android/**.jks
 **/android/bundle
 **/android/key.properties
+# Ignore Gradle build outputs
+capture/
 
-# iOS/macOS
-Pods/
-.generated/
-DerivedData/
+# --- DESKTOP (Fixes the C++ Tag Issue) ---
+# This hides the C++ runner code from GitHub's language detection
+bin/
+**/windows/
+**/linux/
+**/macos/
 
-# Windows/Linux (This is likely what caused the C++ tag)
-**/windows/flutter/
-**/windows/runner/
-build/windows/
+# --- IDEs & OS ---
+.idea/
+.vscode/
+*.iml
+.DS_Store
 
-# Secrets
+# --- SECRETS ---
 .env

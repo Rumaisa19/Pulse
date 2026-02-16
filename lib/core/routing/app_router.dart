@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pulse_news/ui/screens/article_details_screen.dart';
 import 'package:pulse_news/ui/screens/favorites_screen.dart';
+import 'package:pulse_news/ui/screens/setting_screen.dart';
+import 'package:pulse_news/ui/screens/splash_screen.dart';
 import '../../data/models/article.dart';
 import '../../ui/screens/news_feed_screen.dart';
-
-// --- STUB VIEWS (Temporary safety against AssertionErrors) ---
 
 class PlaceholderView extends StatelessWidget {
   final String name;
@@ -20,39 +20,51 @@ class PlaceholderView extends StatelessWidget {
   }
 }
 
-// --- ROUTER LOGIC ---
-
+// Router logic for the application using GoRouter.
 final GoRouter appRouter = GoRouter(
-  initialLocation: '/',
-  debugLogDiagnostics: true, // Lead Dev tip: Shows navigation logs in console
+  initialLocation: '/splash', // Set the initial route to the splash screen.
+  debugLogDiagnostics: true, // Enable navigation logs for debugging.
   routes: [
-    // 1. Home Route
+    // Route for the splash screen.
     GoRoute(
-      path: '/',
-      name: 'home',
-      // Replace PlaceholderView with the real screen
+      name: 'splash',
+      path: '/splash',
+      builder: (_, __) => const SplashScreen(),
+    ),
+
+    // Route for the news feed screen.
+    GoRoute(
+      path: '/feed',
+      name: 'feed',
       builder: (context, state) => const NewsFeedScreen(),
     ),
 
-    // 2. Search Route
+    // Route for the settings screen.
+    GoRoute(
+      name: 'settings',
+      path: '/settings',
+      builder: (context, state) => const SettingsScreen(),
+    ),
+
+    // Route for the search screen, currently using a placeholder view.
     GoRoute(
       path: '/search',
       name: 'search',
-      // Replace with SearchView() when Day 8 logic is ready
       builder: (context, state) => const PlaceholderView(name: 'Search'),
     ),
 
-    // 3. Article Detail Route
+    // Route for displaying article details
     GoRoute(
       name: 'articleDetails',
       path: '/details',
       builder: (context, state) {
-        // Cast the extra object back to an Article
+        // Retrieve the article object passed through the navigation state.
         final article = state.extra as Article;
-        return ArticleDetailScreen(article: article);
+        return ArticleDetailsScreen(article: article);
       },
     ),
-    // Add this route to your GoRouter 'routes' list
+
+    // Route for the favorites screen.
     GoRoute(
       path: '/favorites',
       name: 'favorites',
@@ -60,7 +72,7 @@ final GoRouter appRouter = GoRouter(
     ),
   ],
 
-  // 4. Global Error Handling
+  // Global error handling for navigation errors.
   errorBuilder: (context, state) =>
       Scaffold(body: Center(child: Text('Navigation Error: ${state.error}'))),
 );
