@@ -2,6 +2,38 @@
 
 **PULSE** is a high-performance, minimalist news engine built for Android. It leverages **The Guardian API** to deliver real-time global news through a sophisticated, offline-first architecture.
 
+---
+
+### Light Mode
+
+**Logo**  
+<img src="assets/screenshots/light theme/1.splash_screen.jpeg" width="400" alt="Light Mode Dashboard – Real-time Ledger" />
+
+**Home Page**  
+<img src="assets/screenshots/light theme/2.home_Screen.jpeg" width="400" alt="Light Mode Analytics – Weekly Insights" />
+
+**Saved Stories**  
+<img src="assets/screenshots/light theme/3.saved_stories.jpeg" width="400" alt="Light Mode Add Expense Screen" />
+
+**settings**  
+<img src="assets/screenshots/light theme/4.settings_screen.jpeg" width="400" alt="Light Mode Add Expense Screen" />
+
+### Dark Mode
+
+**Logo**  
+<img src="assets/screenshots/dark theme/1.splash_screen.jpeg" width="400" alt="Light Mode Dashboard – Real-time Ledger" />
+
+**Home Page**  
+<img src="assets/screenshots/dark theme/2.home_Screen.jpeg" width="400" alt="Light Mode Analytics – Weekly Insights" />
+
+**Saved Stories**  
+<img src="assets/screenshots/dark theme/3.saved_stories.jpeg" width="400" alt="Light Mode Add Expense Screen" />
+
+**settings**  
+<img src="assets/screenshots/dark theme/4.settings_screen.jpeg" width="400" alt="Light Mode Add Expense Screen" />
+
+---
+
 ## 🚀 Key Technical Features
 
 - **Offline-First Strategy:** Implemented using **Hive (NoSQL)** for blazingly fast local storage and 100% offline availability of cached articles via local persistence.
@@ -40,21 +72,25 @@ The app follows a **Clean Repository Pattern**:
 ## 📦 Installation & Configuration
 
 1.  **Clone the Repository:**
-    ```bash
-    git clone [https://github.com/Rumaisa19/pulse_news.git](https://github.com/Rumaisa19/pulse_news.git)
-    ```
+
+```bash
+    git clone https://github.com/Rumaisa19/Pulse.git
+```
+
 2.  **Environment Setup:**
     - Ensure your `assets/.env` file exists.
     - Add your Guardian API Key: `GUARDIAN_API_KEY=your_key_here`.
 3.  **Code Generation:**
-    This project uses `json_serializable` and `hive_generator`. Run the following to generate the necessary adapters:
-    ```bash
+
+```bash
     flutter pub run build_runner build --delete-conflicting-outputs
-    ```
+```
+
 4.  **Launch:**
-    ```bash
+
+```bash
     flutter run
-    ```
+```
 
 ---
 
