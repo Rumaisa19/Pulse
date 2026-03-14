@@ -1,105 +1,109 @@
-# PULSE News
+# PULSE — News Engine for Android
 
-**PULSE** is a high-performance, minimalist news engine built for Android. It leverages **The Guardian API** to deliver real-time global news through a sophisticated, offline-first architecture.
+PULSE is an offline-first news application for Android built on The Guardian API.
+Delivers real-time global news through a clean repository architecture with full
+offline availability, reactive state management, and premium UX patterns.
 
 ---
 
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | Flutter |
+| State Management | Provider |
+| Networking | Dio + JsonSerializable |
+| Local Storage | Hive NoSQL |
+| Navigation | GoRouter |
+| Offline Detection | Connectivity Plus |
+| Security | flutter_dotenv |
+
+---
+
+## Architecture
+
+Clean Repository Pattern — three distinct layers:
+
+- **Presentation** — Modular screens and widgets consuming `NewsProvider.`
+- **Repository** — Orchestrates network vs cache decision via `connectivity_plus.`
+- **Data** — JSON-to-Hive model mapping via generated `TypeAdapters.`
+
+---
+
+## Features
+
+- Offline-first — full article availability without a network
+- Smart search with debounce to minimize API calls
+- Shimmer skeleton loading states
+- CachedNetworkImage for optimized bandwidth
+- Dark and light theme support
+- GoRouter deep-link-ready navigation
+- API credentials isolated via `.env` — never hardcoded
+
+---
+
+## Screenshots
+
 ### Light Mode
 
-**Logo**  
+**Splash**  
 <img src="assets/screenshots/light theme/1.splash_screen.jpeg" width="400" alt="Light Mode Dashboard – Real-time Ledger" />
 
-**Home Page**  
+**Home**  
 <img src="assets/screenshots/light theme/2.home_Screen.jpeg" width="400" alt="Light Mode Analytics – Weekly Insights" />
 
-**Saved Stories**  
+**Saved**  
 <img src="assets/screenshots/light theme/3.saved_stories.jpeg" width="400" alt="Light Mode Add Expense Screen" />
 
-**settings**  
+**Settings**  
 <img src="assets/screenshots/light theme/4.settings_screen.jpeg" width="400" alt="Light Mode Add Expense Screen" />
 
 ### Dark Mode
 
-**Logo**  
+**Splash**  
 <img src="assets/screenshots/dark theme/1.splash_screen.jpeg" width="400" alt="Light Mode Dashboard – Real-time Ledger" />
 
-**Home Page**  
+**Home**  
 <img src="assets/screenshots/dark theme/2.home_Screen.jpeg" width="400" alt="Light Mode Analytics – Weekly Insights" />
 
-**Saved Stories**  
+**Saved**  
 <img src="assets/screenshots/dark theme/3.saved_stories.jpeg" width="400" alt="Light Mode Add Expense Screen" />
 
-**settings**  
+**Settings**  
 <img src="assets/screenshots/dark theme/4.settings_screen.jpeg" width="400" alt="Light Mode Add Expense Screen" />
 
 ---
 
-## 🚀 Key Technical Features
+## Setup
 
-- **Offline-First Strategy:** Implemented using **Hive (NoSQL)** for blazingly fast local storage and 100% offline availability of cached articles via local persistence.
-- **Reactive State Management:** Utilizes the **Provider** pattern to maintain a clean unidirectional data flow and synchronize the UI with the repository.
-- **Type-Safe API Integration:** Built with **Dio** and **JsonSerializable** for robust HTTP networking and automated JSON-to-Model mapping.
-- **Smart Search:** Features custom **Debouncing** logic to minimize API overhead and enhance user experience during keyword queries.
-- **Dynamic Navigation:** Powered by **GoRouter** for declarative, deep-link-ready routing within the application.
-- **Premium UX:** Includes **Shimmer** effects for skeleton loading states and **CachedNetworkImage** for optimized image handling and bandwidth saving.
-
----
-
-## 🛠️ Tech Stack
-
-| Layer                 | Technology                            |
-| :-------------------- | :------------------------------------ |
-| **Framework**         | Flutter ^3.10.7                       |
-| **State Management**  | Provider                              |
-| **Networking**        | Dio                                   |
-| **Local Database**    | Hive & Hive Flutter                   |
-| **Navigation**        | GoRouter                              |
-| **Offline Detection** | Connectivity Plus                     |
-| **Design System**     | Google Fonts & Custom w900 Typography |
-
----
-
-## 🏗️ Architectural Overview
-
-The app follows a **Clean Repository Pattern**:
-
-1.  **UI Layer:** Modular widgets and specialized screens listening to the `NewsProvider`.
-2.  **Domain/Repository Layer:** The `NewsRepository` acts as the orchestrator. It checks network status via `connectivity_plus` and decides whether to fetch fresh data from **The Guardian** or serve stored articles from **Hive**.
-3.  **Data Layer:** Handles raw JSON responses and maps them to Hive-enabled `Article` models using generated `TypeAdapters`.
-
----
-
-## 📦 Installation & Configuration
-
-1.  **Clone the Repository:**
-
+1. Clone
 ```bash
-    git clone https://github.com/Rumaisa19/Pulse.git
+git clone https://github.com/Rumaisa19/Pulse.git
+cd Pulse
 ```
 
-2.  **Environment Setup:**
-    - Ensure your `assets/.env` file exists.
-    - Add your Guardian API Key: `GUARDIAN_API_KEY=your_key_here`.
-3.  **Code Generation:**
-
-```bash
-    flutter pub run build_runner build --delete-conflicting-outputs
+2. Add your Guardian API key
+```
+assets/.env
+GUARDIAN_API_KEY=your_key_here
 ```
 
-4.  **Launch:**
-
+3. Run code generation
 ```bash
-    flutter run
+flutter pub run build_runner build --delete-conflicting-outputs
+```
+
+4. Run
+```bash
+flutter run
 ```
 
 ---
 
-## 👤 Developer
+## Developer
 
-- **Project Track:** Expert Flutter Developer.
+**Rumaisa Mushtaq** — Flutter Developer
+- GitHub: [Rumaisa19](https://github.com/Rumaisa19)
+- LinkedIn: [rumaisamushtaq](https://linkedin.com/in/rumaisamushtaq)
+```
 
----
-
-### Final Project Note
-
-This app is optimized for **Android**. It ensures strict security by utilizing `flutter_dotenv` to keep API credentials out of the source code and utilizes **Section Mapping** to bridge UI categories to specific Guardian API backend identifiers.
