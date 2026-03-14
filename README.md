@@ -46,31 +46,15 @@ Clean Repository Pattern — three distinct layers:
 
 ### Light Mode
 
-**Splash**  
-<img src="assets/screenshots/light theme/1.splash_screen.jpeg" width="400" alt="Light Mode Dashboard – Real-time Ledger" />
-
-**Home**  
-<img src="assets/screenshots/light theme/2.home_Screen.jpeg" width="400" alt="Light Mode Analytics – Weekly Insights" />
-
-**Saved**  
-<img src="assets/screenshots/light theme/3.saved_stories.jpeg" width="400" alt="Light Mode Add Expense Screen" />
-
-**Settings**  
-<img src="assets/screenshots/light theme/4.settings_screen.jpeg" width="400" alt="Light Mode Add Expense Screen" />
+| Splash | Home | Saved | Settings |
+|---|---|---|---|
+| ![](assets/screenshots/light%20theme/1.splash_screen.jpeg) | ![](assets/screenshots/light%20theme/2.home_Screen.jpeg) | ![](assets/screenshots/light%20theme/3.saved_stories.jpeg) | ![](assets/screenshots/light%20theme/4.settings_screen.jpeg) |
 
 ### Dark Mode
 
-**Splash**  
-<img src="assets/screenshots/dark theme/1.splash_screen.jpeg" width="400" alt="Light Mode Dashboard – Real-time Ledger" />
-
-**Home**  
-<img src="assets/screenshots/dark theme/2.home_Screen.jpeg" width="400" alt="Light Mode Analytics – Weekly Insights" />
-
-**Saved**  
-<img src="assets/screenshots/dark theme/3.saved_stories.jpeg" width="400" alt="Light Mode Add Expense Screen" />
-
-**Settings**  
-<img src="assets/screenshots/dark theme/4.settings_screen.jpeg" width="400" alt="Light Mode Add Expense Screen" />
+| Splash | Home | Saved | Settings |
+|---|---|---|---|
+| ![](assets/screenshots/dark%20theme/1.splash_screen.jpeg) | ![](assets/screenshots/dark%20theme/2.home_Screen.jpeg) | ![](assets/screenshots/dark%20theme/3.saved_stories.jpeg) | ![](assets/screenshots/dark%20theme/4.settings_screen.jpeg) |
 
 ---
 
